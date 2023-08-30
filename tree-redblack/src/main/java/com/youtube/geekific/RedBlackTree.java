@@ -72,22 +72,22 @@ public class RedBlackTree<T extends Comparable<T>> implements Tree<T> {
 
     private void handleRightSituations(Node<T> node, Node<T> parent, Node<T> grandParent) {
         if (node.isLeftChild()) {
-            rotateRight(parent);
+           parent =  rotateRight(parent); //  as the added node takes the position of the parent after the first rotation 
         }
         parent.flipColor();
         grandParent.flipColor();
         rotateLeft(grandParent);
-        recolorAndRotate(node.isLeftChild() ? grandParent : parent);
+        //recolorAndRotate(node.isLeftChild() ? grandParent : parent); // not required but doesn't affect the functionality of the code 
     }
 
     private void handleLeftSituations(Node<T> node, Node<T> parent, Node<T> grandParent) {
         if (!node.isLeftChild()) {
-            rotateLeft(parent);
+           parent =  rotateLeft(parent); // as the added node takes the position of the parent after the first rotation 
         }
         parent.flipColor();
         grandParent.flipColor();
         rotateRight(grandParent);
-        recolorAndRotate(node.isLeftChild() ? parent : grandParent);
+        //recolorAndRotate(node.isLeftChild() ? parent : grandParent); // not required but doesn't affect the functionality of the code 
     }
 
     private void handleRecoloring(Node<T> parent, Node<T> uncle, Node<T> grandParent) {
@@ -97,7 +97,7 @@ public class RedBlackTree<T extends Comparable<T>> implements Tree<T> {
         recolorAndRotate(grandParent);
     }
 
-    private void rotateRight(Node<T> node) {
+    private Node<T> rotateRight(Node<T> node) {
         Node<T> leftNode = node.getLeftChild();
         node.setLeftChild(leftNode.getRightChild());
         if (node.getLeftChild() != null) {
@@ -107,9 +107,10 @@ public class RedBlackTree<T extends Comparable<T>> implements Tree<T> {
         leftNode.setParent(node.getParent());
         updateChildrenOfParentNode(node, leftNode);
         node.setParent(leftNode);
+        return leftNode ; 
     }
 
-    private void rotateLeft(Node<T> node) {
+    private Node<T> rotateLeft(Node<T> node) {
         Node<T> rightNode = node.getRightChild();
         node.setRightChild(rightNode.getLeftChild());
         if (node.getRightChild() != null) {
@@ -119,6 +120,7 @@ public class RedBlackTree<T extends Comparable<T>> implements Tree<T> {
         rightNode.setParent(node.getParent());
         updateChildrenOfParentNode(node, rightNode);
         node.setParent(rightNode);
+        return rightNode ; 
     }
 
     private void updateChildrenOfParentNode(Node<T> node, Node<T> tempNode) {
